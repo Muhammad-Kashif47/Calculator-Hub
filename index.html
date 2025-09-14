@@ -1,0 +1,1852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator Hub - All-in-One Calculator Suite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
+        .fade-in { animation: fadeIn 0.5s ease-in-out; }
+        .slide-up { animation: slideUp 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Amazing Calculator Animations */
+        .calculator-button {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateZ(0);
+        }
+        
+        .calculator-button:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .calculator-button:active {
+            transform: translateY(0) scale(0.98);
+            transition: all 0.1s;
+        }
+        
+        .number-pop {
+            animation: numberPop 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        @keyframes numberPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .result-reveal {
+            animation: resultReveal 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        @keyframes resultReveal {
+            0% { 
+                opacity: 0; 
+                transform: translateY(20px) scale(0.9);
+            }
+            100% { 
+                opacity: 1; 
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .pulse-success {
+            animation: pulseSuccess 0.6s ease-out;
+        }
+        
+        @keyframes pulseSuccess {
+            0% { 
+                background-color: #10b981;
+                transform: scale(1);
+            }
+            50% { 
+                background-color: #059669;
+                transform: scale(1.05);
+            }
+            100% { 
+                background-color: #10b981;
+                transform: scale(1);
+            }
+        }
+        
+        .shake-error {
+            animation: shakeError 0.5s ease-in-out;
+        }
+        
+        @keyframes shakeError {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
+        .glow-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .glow-effect::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .glow-effect:hover::before {
+            left: 100%;
+        }
+        
+        .bounce-in {
+            animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3) translateY(-50px);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05) translateY(-10px);
+            }
+            70% {
+                transform: scale(0.9) translateY(0);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        
+        .slide-in-left {
+            animation: slideInLeft 0.5s ease-out;
+        }
+        
+        @keyframes slideInLeft {
+            0% {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .slide-in-right {
+            animation: slideInRight 0.5s ease-out;
+        }
+        
+        @keyframes slideInRight {
+            0% {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .flip-in {
+            animation: flipIn 0.6s ease-out;
+        }
+        
+        @keyframes flipIn {
+            0% {
+                opacity: 0;
+                transform: rotateY(-90deg);
+            }
+            100% {
+                opacity: 1;
+                transform: rotateY(0);
+            }
+        }
+        
+        .zoom-in {
+            animation: zoomIn 0.4s ease-out;
+        }
+        
+        @keyframes zoomIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .gradient-shift {
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .typing-effect {
+            overflow: hidden;
+            border-right: 2px solid #667eea;
+            white-space: nowrap;
+            animation: typing 2s steps(20, end), blink 0.75s step-end infinite;
+        }
+        
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        
+        @keyframes blink {
+            from, to { border-color: transparent; }
+            50% { border-color: #667eea; }
+        }
+        .calculator-display { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .btn-primary:hover { background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%); }
+        .category-badge { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .category-filter {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+        .category-filter:hover {
+            background: #e5e7eb;
+            color: #374151;
+        }
+        .category-filter.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        /* Dark theme styles */
+        .dark-theme {
+            background: #111827 !important;
+            color: #f9fafb !important;
+        }
+        
+        .dark-theme h1, .dark-theme h2, .dark-theme h3 {
+            color: #f9fafb !important;
+        }
+        
+        .dark-theme .text-gray-900 {
+            color: #f9fafb !important;
+        }
+        
+        .dark-theme .text-gray-700 {
+            color: #d1d5db !important;
+        }
+        
+        .dark-theme .text-gray-600 {
+            color: #9ca3af !important;
+        }
+        
+        .dark-theme input, .dark-theme select {
+            background: #374151 !important;
+            border-color: #4b5563 !important;
+            color: #f9fafb !important;
+        }
+        
+        .dark-theme input::placeholder {
+            color: #9ca3af !important;
+        }
+        
+        .dark-theme .bg-gray-50 {
+            background: #374151 !important;
+        }
+        
+        .dark-theme .bg-blue-50 {
+            background: #1e3a8a !important;
+        }
+        
+        .dark-theme .bg-green-50 {
+            background: #14532d !important;
+        }
+        
+        .dark-theme .bg-red-50 {
+            background: #7f1d1d !important;
+        }
+        
+        .dark-theme .bg-purple-50 {
+            background: #581c87 !important;
+        }
+        
+        .dark-theme .bg-yellow-50 {
+            background: #713f12 !important;
+        }
+        
+        .dark-theme .bg-orange-50 {
+            background: #7c2d12 !important;
+        }
+        
+        .dark-theme .bg-cyan-50 {
+            background: #164e63 !important;
+        }
+        
+        .dark-theme .category-filter {
+            background: #374151 !important;
+            color: #d1d5db !important;
+        }
+        
+        .dark-theme .category-filter:hover {
+            background: #4b5563 !important;
+            color: #f9fafb !important;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-lg">🧮</span>
+                    </div>
+                    <h1 class="text-2xl font-bold text-gray-900">Calculator Hub</h1>
+                </div>
+                <button onclick="toggleTheme()" class="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Search and Filter Section -->
+        <div class="mb-8 fade-in">
+            <div class="max-w-2xl mx-auto">
+                <div class="relative">
+                    <input 
+                        type="text" 
+                        id="searchInput"
+                        placeholder="Search calculators..." 
+                        class="w-full px-4 py-3 pl-12 pr-4 text-gray-700 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
+                        oninput="filterCalculators()"
+                    >
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <span class="text-gray-400">🔍</span>
+                    </div>
+                </div>
+                
+                <!-- Category Filter -->
+                <div class="flex flex-wrap gap-2 mt-4 justify-center">
+                    <button onclick="filterByCategory('all', this)" class="category-filter active px-4 py-2 rounded-full text-sm font-medium transition-all">All</button>
+                    <button onclick="filterByCategory('basic', this)" class="category-filter px-4 py-2 rounded-full text-sm font-medium transition-all">Basic</button>
+                    <button onclick="filterByCategory('scientific', this)" class="category-filter px-4 py-2 rounded-full text-sm font-medium transition-all">Scientific</button>
+                    <button onclick="filterByCategory('financial', this)" class="category-filter px-4 py-2 rounded-full text-sm font-medium transition-all">Financial</button>
+                    <button onclick="filterByCategory('health', this)" class="category-filter px-4 py-2 rounded-full text-sm font-medium transition-all">Health</button>
+                    <button onclick="filterByCategory('converter', this)" class="category-filter px-4 py-2 rounded-full text-sm font-medium transition-all">Marks Calculator</button>
+                    <button onclick="filterByCategory('programming', this)" class="category-filter px-4 py-2 rounded-full text-sm font-medium transition-all">Programming</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calculator Grid -->
+        <div id="calculatorGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 slide-up">
+            <!-- Calculator cards will be populated by JavaScript -->
+        </div>
+
+        <!-- Calculator Modal -->
+        <div id="calculatorModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 id="modalTitle" class="text-xl font-bold text-gray-900"></h2>
+                        <button onclick="closeModal()" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                            <span class="text-gray-500">✕</span>
+                        </button>
+                    </div>
+                    <div id="modalContent" class="space-y-4">
+                        <!-- Calculator content will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer id="footer" class="bg-white border-t border-gray-200 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="text-center">
+                <div class="flex items-center justify-center space-x-2 mb-4">
+                    <span class="text-red-500 text-xl animate-pulse">❤️</span>
+                    <p class="text-gray-600 font-medium">Developed with love by</p>
+                    <span class="text-red-500 text-xl animate-pulse">❤️</span>
+                </div>
+                <h3 class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2 gradient-shift">
+                    Muhammad Kashif Iftikhar
+                </h3>
+                <div class="flex justify-center space-x-4 mt-4">
+                    <div class="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
+                    <div class="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style="animation-delay: 0.1s;"></div>
+                    <div class="w-2 h-2 bg-pink-500 rounded-full animate-bounce" style="animation-delay: 0.2s;"></div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Calculator data
+        const calculators = [
+            {
+                id: 'basic',
+                title: 'Basic Calculator',
+                description: 'Simple arithmetic operations',
+                category: 'basic',
+                icon: '🧮',
+                color: 'from-blue-400 to-blue-600'
+            },
+            {
+                id: 'scientific',
+                title: 'Scientific Calculator',
+                description: 'Advanced mathematical functions',
+                category: 'scientific',
+                icon: '🔬',
+                color: 'from-purple-400 to-purple-600'
+            },
+            {
+                id: 'loan',
+                title: 'Loan Calculator',
+                description: 'Calculate loan payments and interest',
+                category: 'financial',
+                icon: '🏦',
+                color: 'from-green-400 to-green-600'
+            },
+            {
+                id: 'bmi',
+                title: 'BMI Calculator',
+                description: 'Body Mass Index calculator',
+                category: 'health',
+                icon: '⚖️',
+                color: 'from-red-400 to-red-600'
+            },
+            {
+                id: 'unit',
+                title: 'Unit Converter',
+                description: 'Convert between different units',
+                category: 'converter',
+                icon: '🔄',
+                color: 'from-yellow-400 to-yellow-600'
+            },
+            {
+                id: 'age',
+                title: 'Age Calculator',
+                description: 'Calculate age and date differences',
+                category: 'converter',
+                icon: '📅',
+                color: 'from-indigo-400 to-indigo-600'
+            },
+            {
+                id: 'binary',
+                title: 'Binary Converter',
+                description: 'Convert between number systems',
+                category: 'programming',
+                icon: '💻',
+                color: 'from-gray-400 to-gray-600'
+            },
+            {
+                id: 'percentage',
+                title: 'Percentage Calculator',
+                description: 'Calculate percentages and ratios',
+                category: 'basic',
+                icon: '📊',
+                color: 'from-pink-400 to-pink-600'
+            },
+            {
+                id: 'compound',
+                title: 'Compound Interest',
+                description: 'Calculate compound interest',
+                category: 'financial',
+                icon: '📈',
+                color: 'from-teal-400 to-teal-600'
+            },
+            {
+                id: 'calorie',
+                title: 'Calorie Calculator',
+                description: 'Calculate daily calorie needs',
+                category: 'health',
+                icon: '🍎',
+                color: 'from-orange-400 to-orange-600'
+            },
+            {
+                id: 'temperature',
+                title: 'Temperature Converter',
+                description: 'Convert temperature units',
+                category: 'converter',
+                icon: '🌡️',
+                color: 'from-cyan-400 to-cyan-600'
+            },
+            {
+                id: 'marks',
+                title: 'Marks Percentage Calculator',
+                description: 'Calculate percentage and grades',
+                category: 'basic',
+                icon: '📝',
+                color: 'from-emerald-400 to-emerald-600'
+            }
+        ];
+
+        // Initialize the app
+        function init() {
+            renderCalculators();
+        }
+
+        // Render calculator cards
+        function renderCalculators(filteredCalculators = calculators) {
+            const grid = document.getElementById('calculatorGrid');
+            grid.innerHTML = '';
+
+            filteredCalculators.forEach((calc, index) => {
+                const card = document.createElement('div');
+                card.className = 'calculator-card bg-white rounded-xl shadow-lg card-hover cursor-pointer overflow-hidden';
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.onclick = () => openCalculator(calc.id);
+
+                card.innerHTML = `
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-r ${calc.color} rounded-lg flex items-center justify-center text-white text-xl">
+                                ${calc.icon}
+                            </div>
+                            <span class="category-badge text-white text-xs px-2 py-1 rounded-full">${calc.category}</span>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">${calc.title}</h3>
+                        <p class="text-gray-600 text-sm">${calc.description}</p>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+        }
+
+        // Filter calculators by search
+        function filterCalculators() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const activeCategory = document.querySelector('.category-filter.active').textContent.toLowerCase();
+            
+            let filtered = calculators.filter(calc => 
+                calc.title.toLowerCase().includes(searchTerm) || 
+                calc.description.toLowerCase().includes(searchTerm)
+            );
+
+            if (activeCategory !== 'all') {
+                filtered = filtered.filter(calc => calc.category === activeCategory);
+            }
+
+            renderCalculators(filtered);
+        }
+
+        // Filter by category
+        function filterByCategory(category, element) {
+            document.querySelectorAll('.category-filter').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+            filterCalculators();
+        }
+
+        // Open calculator modal
+        function openCalculator(calculatorId) {
+            const calc = calculators.find(c => c.id === calculatorId);
+            document.getElementById('modalTitle').textContent = calc.title;
+            document.getElementById('modalContent').innerHTML = getCalculatorContent(calculatorId);
+            document.getElementById('calculatorModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('calculatorModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Get calculator content
+        function getCalculatorContent(calculatorId) {
+            let content;
+            switch(calculatorId) {
+                case 'basic':
+                    content = getBasicCalculatorHTML();
+                    break;
+                case 'scientific':
+                    content = getScientificCalculatorHTML();
+                    break;
+                case 'loan':
+                    content = getLoanCalculatorHTML();
+                    break;
+                case 'bmi':
+                    content = getBMICalculatorHTML();
+                    break;
+                case 'unit':
+                    content = getUnitConverterHTML();
+                    // Initialize unit converter after content is loaded
+                    setTimeout(() => {
+                        if (document.getElementById('conversionType')) {
+                            window.updateUnitOptions();
+                        }
+                    }, 100);
+                    break;
+                case 'age':
+                    content = getAgeCalculatorHTML();
+                    // Set today's date as default
+                    setTimeout(() => {
+                        const today = new Date().toISOString().split('T')[0];
+                        const asOfDateInput = document.getElementById('asOfDate');
+                        if (asOfDateInput) {
+                            asOfDateInput.value = today;
+                        }
+                    }, 100);
+                    break;
+                case 'binary':
+                    content = getBinaryConverterHTML();
+                    break;
+                case 'percentage':
+                    content = getPercentageCalculatorHTML();
+                    break;
+                case 'compound':
+                    content = getCompoundInterestHTML();
+                    break;
+                case 'calorie':
+                    content = getCalorieCalculatorHTML();
+                    break;
+                case 'temperature':
+                    content = getTemperatureConverterHTML();
+                    break;
+                case 'marks':
+                    content = getMarksCalculatorHTML();
+                    break;
+                default:
+                    content = '<p>Calculator not implemented yet.</p>';
+            }
+            return content;
+        }
+
+        // Basic Calculator HTML
+        function getBasicCalculatorHTML() {
+            return `
+                <div class="calculator-display text-white p-4 rounded-lg mb-4">
+                    <div id="basicDisplay" class="text-right text-2xl font-mono">0</div>
+                </div>
+                <div class="grid grid-cols-4 gap-2">
+                    <button onclick="clearBasic()" class="calculator-button glow-effect col-span-2 bg-red-500 hover:bg-red-600 text-white p-3 rounded-lg font-semibold">Clear</button>
+                    <button onclick="deleteBasic()" class="calculator-button glow-effect bg-yellow-500 hover:bg-yellow-600 text-white p-3 rounded-lg font-semibold">⌫</button>
+                    <button onclick="operatorBasic('/')" class="calculator-button glow-effect bg-gray-500 hover:bg-gray-600 text-white p-3 rounded-lg font-semibold">÷</button>
+                    
+                    <button onclick="numberBasic('7')" class="calculator-button glow-effect bg-gray-200 hover:bg-gray-300 text-gray-800 p-3 rounded-lg font-semibold">7</button>
+                    <button onclick="numberBasic('8')" class="calculator-button glow-effect bg-gray-200 hover:bg-gray-300 text-gray-800 p-3 rounded-lg font-semibold">8</button>
+                    <button onclick="numberBasic('9')" class="calculator-button glow-effect bg-gray-200 hover:bg-gray-300 text-gray-800 p-3 rounded-lg font-semibold">9</button>
+                    <button onclick="operatorBasic('*')" class="calculator-button glow-effect bg-gray-500 hover:bg-gray-600 text-white p-3 rounded-lg font-semibold">×</button>
+                    
+                    <button onclick="numberBasic('4')" class="calculator-button glow-effect bg-gray-200 hover:bg-gray-300 text-gray-800 p-3 rounded-lg font-semibold">4</button>
+                    <button onclick="numberBasic('5')" class="calculator-button glow-effect bg-gray-200 hover:bg-gray-300 text-gray-800 p-3 rounded-lg font-semibold">5</button>
+                    <button onclick="numberBasic('6')" class="calculator-button glow-effect bg-gray-200 hover:bg-gray-300 text-gray-800 p-3 rounded-lg font-semibold">6</button>
+                    <button onclick="operatorBasic('-')" class="calculator-button glow-effect bg-gray-500 hover:bg-gray-600 text-white p-3 rounded-lg font-semibold">−</button>
+                    
+                    <button onclick="numberBasic('1')" class="calculator-button glow-effect bg-gray-200 hover:bg-gray-300 text-gray-800 p-3 rounded-lg font-semibold">1</button>
+                    <button onclick="numberBasic('2')" class="calculator-button glow-effect bg-gray-200 hover:bg-gray-300 text-gray-800 p-3 rounded-lg font-semibold">2</button>
+                    <button onclick="numberBasic('3')" class="calculator-button glow-effect bg-gray-200 hover:bg-gray-300 text-gray-800 p-3 rounded-lg font-semibold">3</button>
+                    <button onclick="operatorBasic('+')" class="calculator-button glow-effect bg-gray-500 hover:bg-gray-600 text-white p-3 rounded-lg font-semibold">+</button>
+                    
+                    <button onclick="numberBasic('0')" class="calculator-button glow-effect col-span-2 bg-gray-200 hover:bg-gray-300 text-gray-800 p-3 rounded-lg font-semibold">0</button>
+                    <button onclick="numberBasic('.')" class="calculator-button glow-effect bg-gray-200 hover:bg-gray-300 text-gray-800 p-3 rounded-lg font-semibold">.</button>
+                    <button onclick="calculateBasic()" class="calculator-button glow-effect btn-primary hover:bg-blue-600 text-white p-3 rounded-lg font-semibold">=</button>
+                </div>
+            `;
+        }
+
+        // BMI Calculator HTML
+        function getBMICalculatorHTML() {
+            return `
+                <div class="space-y-4">
+                    <div class="slide-in-left">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Height (cm)</label>
+                        <input type="number" id="height" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300" placeholder="170">
+                    </div>
+                    <div class="slide-in-right">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Weight (kg)</label>
+                        <input type="number" id="weight" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300" placeholder="70">
+                    </div>
+                    <button onclick="calculateBMI()" class="calculator-button glow-effect w-full btn-primary text-white py-3 rounded-lg font-semibold">Calculate BMI</button>
+                    <div id="bmiResult" class="hidden p-4 bg-gray-50 rounded-lg result-reveal">
+                        <div class="text-center bounce-in">
+                            <div id="bmiValue" class="text-3xl font-bold text-gray-900 mb-2 number-pop"></div>
+                            <div id="bmiCategory" class="text-lg font-medium mb-2 flip-in"></div>
+                            <div id="bmiDescription" class="text-sm text-gray-600 zoom-in"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Loan Calculator HTML
+        function getLoanCalculatorHTML() {
+            return `
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Loan Amount ($)</label>
+                        <input type="number" id="loanAmount" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="100000">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Interest Rate (%)</label>
+                        <input type="number" id="interestRate" step="0.01" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="5.5">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Loan Term (years)</label>
+                        <input type="number" id="loanTerm" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="30">
+                    </div>
+                    <button onclick="calculateLoan()" class="w-full btn-primary text-white py-3 rounded-lg font-semibold">Calculate Payment</button>
+                    <div id="loanResult" class="hidden space-y-3">
+                        <div class="p-4 bg-gray-50 rounded-lg">
+                            <div class="text-center">
+                                <div class="text-sm text-gray-600">Monthly Payment</div>
+                                <div id="monthlyPayment" class="text-2xl font-bold text-gray-900"></div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="p-3 bg-blue-50 rounded-lg text-center">
+                                <div class="text-xs text-gray-600">Total Interest</div>
+                                <div id="totalInterest" class="text-lg font-semibold text-blue-600"></div>
+                            </div>
+                            <div class="p-3 bg-green-50 rounded-lg text-center">
+                                <div class="text-xs text-gray-600">Total Amount</div>
+                                <div id="totalAmount" class="text-lg font-semibold text-green-600"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Unit Converter HTML
+        function getUnitConverterHTML() {
+            return `
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Conversion Type</label>
+                        <select id="conversionType" onchange="updateUnitOptions()" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="length">Length</option>
+                            <option value="weight">Weight</option>
+                            <option value="temperature">Temperature</option>
+                        </select>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">From</label>
+                            <select id="fromUnit" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">To</label>
+                            <select id="toUnit" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Value</label>
+                        <input type="number" id="inputValue" oninput="convertUnit()" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="1">
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <div class="text-center">
+                            <div class="text-sm text-gray-600">Result</div>
+                            <div id="conversionResult" class="text-2xl font-bold text-gray-900">0</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Age Calculator HTML
+        function getAgeCalculatorHTML() {
+            return `
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Birth Date</label>
+                        <input type="date" id="birthDate" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Calculate Age As Of (optional)</label>
+                        <input type="date" id="asOfDate" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <button onclick="calculateAge()" class="w-full btn-primary text-white py-3 rounded-lg font-semibold">Calculate Age</button>
+                    <div id="ageResult" class="hidden space-y-3">
+                        <div class="p-4 bg-gray-50 rounded-lg text-center">
+                            <div class="text-sm text-gray-600 mb-2">Exact Age</div>
+                            <div id="ageYears" class="text-lg font-bold text-gray-900"></div>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div class="p-3 bg-blue-50 rounded-lg text-center">
+                                <div id="ageMonths" class="text-lg font-semibold text-blue-600"></div>
+                                <div class="text-xs text-gray-600">Total Months</div>
+                            </div>
+                            <div class="p-3 bg-green-50 rounded-lg text-center">
+                                <div id="ageDays" class="text-lg font-semibold text-green-600"></div>
+                                <div class="text-xs text-gray-600">Total Days</div>
+                            </div>
+                            <div class="p-3 bg-purple-50 rounded-lg text-center">
+                                <div id="ageHours" class="text-lg font-semibold text-purple-600"></div>
+                                <div class="text-xs text-gray-600">Total Hours</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Binary Converter HTML
+        function getBinaryConverterHTML() {
+            return `
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Decimal</label>
+                        <input type="number" id="decimalInput" oninput="convertFromDecimal()" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="255">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Binary</label>
+                        <input type="text" id="binaryInput" oninput="convertFromBinary()" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="11111111">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Hexadecimal</label>
+                        <input type="text" id="hexInput" oninput="convertFromHex()" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="FF">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Octal</label>
+                        <input type="text" id="octalInput" oninput="convertFromOctal()" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="377">
+                    </div>
+                    <button onclick="clearAllInputs()" class="w-full bg-gray-500 hover:bg-gray-600 text-white py-2 rounded-lg font-semibold">Clear All</button>
+                </div>
+            `;
+        }
+
+        // Scientific Calculator HTML
+        function getScientificCalculatorHTML() {
+            return `
+                <div class="calculator-display text-white p-4 rounded-lg mb-4">
+                    <div id="scientificDisplay" class="text-right text-xl font-mono">0</div>
+                </div>
+                <div class="grid grid-cols-5 gap-1 text-sm">
+                    <button onclick="clearScientific()" class="calculator-button glow-effect col-span-2 bg-red-500 hover:bg-red-600 text-white p-2 rounded font-semibold">Clear</button>
+                    <button onclick="scientificFunction('sqrt')" class="calculator-button glow-effect bg-blue-500 hover:bg-blue-600 text-white p-2 rounded">√</button>
+                    <button onclick="scientificFunction('pow')" class="calculator-button glow-effect bg-blue-500 hover:bg-blue-600 text-white p-2 rounded">x²</button>
+                    <button onclick="scientificFunction('log')" class="calculator-button glow-effect bg-blue-500 hover:bg-blue-600 text-white p-2 rounded">log</button>
+                    
+                    <button onclick="scientificFunction('sin')" class="calculator-button glow-effect bg-purple-500 hover:bg-purple-600 text-white p-2 rounded">sin</button>
+                    <button onclick="scientificFunction('cos')" class="calculator-button glow-effect bg-purple-500 hover:bg-purple-600 text-white p-2 rounded">cos</button>
+                    <button onclick="scientificFunction('tan')" class="calculator-button glow-effect bg-purple-500 hover:bg-purple-600 text-white p-2 rounded">tan</button>
+                    <button onclick="numberScientific('(')" class="calculator-button glow-effect bg-gray-500 hover:bg-gray-600 text-white p-2 rounded">(</button>
+                    <button onclick="numberScientific(')')" class="calculator-button glow-effect bg-gray-500 hover:bg-gray-600 text-white p-2 rounded">)</button>
+                    
+                    <button onclick="numberScientific('7')" class="calculator-button glow-effect bg-gray-200 hover:bg-gray-300 text-gray-800 p-2 rounded">7</button>
+                    <button onclick="numberScientific('8')" class="calculator-button glow-effect bg-gray-200 hover:bg-gray-300 text-gray-800 p-2 rounded">8</button>
+                    <button onclick="numberScientific('9')" class="calculator-button glow-effect bg-gray-200 hover:bg-gray-300 text-gray-800 p-2 rounded">9</button>
+                    <button onclick="operatorScientific('/')" class="calculator-button glow-effect bg-gray-500 hover:bg-gray-600 text-white p-2 rounded">÷</button>
+                    <button onclick="deleteScientific()" class="calculator-button glow-effect bg-yellow-500 hover:bg-yellow-600 text-white p-2 rounded">⌫</button>
+                    
+                    <button onclick="numberScientific('4')" class="calculator-button glow-effect bg-gray-200 hover:bg-gray-300 text-gray-800 p-2 rounded">4</button>
+                    <button onclick="numberScientific('5')" class="calculator-button glow-effect bg-gray-200 hover:bg-gray-300 text-gray-800 p-2 rounded">5</button>
+                    <button onclick="numberScientific('6')" class="calculator-button glow-effect bg-gray-200 hover:bg-gray-300 text-gray-800 p-2 rounded">6</button>
+                    <button onclick="operatorScientific('*')" class="calculator-button glow-effect bg-gray-500 hover:bg-gray-600 text-white p-2 rounded">×</button>
+                    <button onclick="numberScientific('π')" class="calculator-button glow-effect bg-blue-500 hover:bg-blue-600 text-white p-2 rounded">π</button>
+                    
+                    <button onclick="numberScientific('1')" class="calculator-button glow-effect bg-gray-200 hover:bg-gray-300 text-gray-800 p-2 rounded">1</button>
+                    <button onclick="numberScientific('2')" class="calculator-button glow-effect bg-gray-200 hover:bg-gray-300 text-gray-800 p-2 rounded">2</button>
+                    <button onclick="numberScientific('3')" class="calculator-button glow-effect bg-gray-200 hover:bg-gray-300 text-gray-800 p-2 rounded">3</button>
+                    <button onclick="operatorScientific('-')" class="calculator-button glow-effect bg-gray-500 hover:bg-gray-600 text-white p-2 rounded">−</button>
+                    <button onclick="numberScientific('e')" class="calculator-button glow-effect bg-blue-500 hover:bg-blue-600 text-white p-2 rounded">e</button>
+                    
+                    <button onclick="numberScientific('0')" class="calculator-button glow-effect col-span-2 bg-gray-200 hover:bg-gray-300 text-gray-800 p-2 rounded">0</button>
+                    <button onclick="numberScientific('.')" class="calculator-button glow-effect bg-gray-200 hover:bg-gray-300 text-gray-800 p-2 rounded">.</button>
+                    <button onclick="operatorScientific('+')" class="calculator-button glow-effect bg-gray-500 hover:bg-gray-600 text-white p-2 rounded">+</button>
+                    <button onclick="calculateScientific()" class="calculator-button glow-effect btn-primary text-white p-2 rounded">=</button>
+                </div>
+            `;
+        }
+
+        // Percentage Calculator HTML
+        function getPercentageCalculatorHTML() {
+            return `
+                <div class="space-y-6">
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <h3 class="font-semibold text-gray-900 mb-3">What is X% of Y?</h3>
+                        <div class="grid grid-cols-3 gap-2 items-center">
+                            <input type="number" id="percent1" placeholder="25" class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <span class="text-center text-gray-600">% of</span>
+                            <input type="number" id="value1" placeholder="200" class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <button onclick="calculatePercentOf()" class="w-full mt-3 bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg">Calculate</button>
+                        <div id="result1" class="mt-2 text-center font-semibold text-blue-600"></div>
+                    </div>
+
+                    <div class="p-4 bg-green-50 rounded-lg">
+                        <h3 class="font-semibold text-gray-900 mb-3">X is what % of Y?</h3>
+                        <div class="grid grid-cols-3 gap-2 items-center">
+                            <input type="number" id="value2" placeholder="50" class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                            <span class="text-center text-gray-600">is what % of</span>
+                            <input type="number" id="total2" placeholder="200" class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                        </div>
+                        <button onclick="calculateWhatPercent()" class="w-full mt-3 bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg">Calculate</button>
+                        <div id="result2" class="mt-2 text-center font-semibold text-green-600"></div>
+                    </div>
+
+                    <div class="p-4 bg-purple-50 rounded-lg">
+                        <h3 class="font-semibold text-gray-900 mb-3">Percentage Change</h3>
+                        <div class="grid grid-cols-3 gap-2 items-center">
+                            <input type="number" id="oldValue" placeholder="100" class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                            <span class="text-center text-gray-600">to</span>
+                            <input type="number" id="newValue" placeholder="120" class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        </div>
+                        <button onclick="calculatePercentChange()" class="w-full mt-3 bg-purple-500 hover:bg-purple-600 text-white py-2 rounded-lg">Calculate</button>
+                        <div id="result3" class="mt-2 text-center font-semibold text-purple-600"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Compound Interest HTML
+        function getCompoundInterestHTML() {
+            return `
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Principal Amount ($)</label>
+                        <input type="number" id="principal" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="10000">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Annual Interest Rate (%)</label>
+                        <input type="number" id="rate" step="0.01" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="5">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Time Period (years)</label>
+                        <input type="number" id="time" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="10">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Compound Frequency</label>
+                        <select id="frequency" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="1">Annually</option>
+                            <option value="2">Semi-annually</option>
+                            <option value="4">Quarterly</option>
+                            <option value="12" selected>Monthly</option>
+                            <option value="365">Daily</option>
+                        </select>
+                    </div>
+                    <button onclick="calculateCompoundInterest()" class="w-full btn-primary text-white py-3 rounded-lg font-semibold">Calculate</button>
+                    <div id="compoundResult" class="hidden space-y-3">
+                        <div class="p-4 bg-gray-50 rounded-lg text-center">
+                            <div class="text-sm text-gray-600">Final Amount</div>
+                            <div id="finalAmount" class="text-2xl font-bold text-gray-900"></div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="p-3 bg-green-50 rounded-lg text-center">
+                                <div class="text-xs text-gray-600">Interest Earned</div>
+                                <div id="interestEarned" class="text-lg font-semibold text-green-600"></div>
+                            </div>
+                            <div class="p-3 bg-blue-50 rounded-lg text-center">
+                                <div class="text-xs text-gray-600">Total Return</div>
+                                <div id="totalReturn" class="text-lg font-semibold text-blue-600"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Calorie Calculator HTML
+        function getCalorieCalculatorHTML() {
+            return `
+                <div class="space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Age</label>
+                            <input type="number" id="age" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="25">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Gender</label>
+                            <select id="gender" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Height (cm)</label>
+                            <input type="number" id="heightCal" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="170">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Weight (kg)</label>
+                            <input type="number" id="weightCal" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="70">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Activity Level</label>
+                        <select id="activity" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="1.2">Sedentary (little/no exercise)</option>
+                            <option value="1.375">Light activity (light exercise 1-3 days/week)</option>
+                            <option value="1.55" selected>Moderate activity (moderate exercise 3-5 days/week)</option>
+                            <option value="1.725">Very active (hard exercise 6-7 days/week)</option>
+                            <option value="1.9">Extremely active (very hard exercise, physical job)</option>
+                        </select>
+                    </div>
+                    <button onclick="calculateCalories()" class="w-full btn-primary text-white py-3 rounded-lg font-semibold">Calculate Daily Calories</button>
+                    <div id="calorieResult" class="hidden space-y-3">
+                        <div class="p-4 bg-gray-50 rounded-lg text-center">
+                            <div class="text-sm text-gray-600">Daily Calorie Needs</div>
+                            <div id="maintenanceCalories" class="text-2xl font-bold text-gray-900"></div>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div class="p-3 bg-red-50 rounded-lg text-center">
+                                <div class="text-xs text-gray-600">Weight Loss</div>
+                                <div id="weightLoss" class="text-sm font-semibold text-red-600"></div>
+                            </div>
+                            <div class="p-3 bg-green-50 rounded-lg text-center">
+                                <div class="text-xs text-gray-600">Maintenance</div>
+                                <div id="maintenance" class="text-sm font-semibold text-green-600"></div>
+                            </div>
+                            <div class="p-3 bg-blue-50 rounded-lg text-center">
+                                <div class="text-xs text-gray-600">Weight Gain</div>
+                                <div id="weightGain" class="text-sm font-semibold text-blue-600"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Temperature Converter HTML
+        function getTemperatureConverterHTML() {
+            return `
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Celsius (°C)</label>
+                        <input type="number" id="celsius" oninput="convertFromCelsius()" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="25">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Fahrenheit (°F)</label>
+                        <input type="number" id="fahrenheit" oninput="convertFromFahrenheit()" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="77">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Kelvin (K)</label>
+                        <input type="number" id="kelvin" oninput="convertFromKelvin()" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="298.15">
+                    </div>
+                    <button onclick="clearTemperature()" class="w-full bg-gray-500 hover:bg-gray-600 text-white py-2 rounded-lg font-semibold">Clear All</button>
+                    
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <h3 class="font-semibold text-gray-900 mb-2">Common Temperatures</h3>
+                        <div class="space-y-1 text-sm">
+                            <div class="flex justify-between">
+                                <span>Water freezes:</span>
+                                <span>0°C = 32°F = 273.15K</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Room temperature:</span>
+                                <span>20°C = 68°F = 293.15K</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Body temperature:</span>
+                                <span>37°C = 98.6°F = 310.15K</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Water boils:</span>
+                                <span>100°C = 212°F = 373.15K</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Marks Percentage Calculator HTML
+        function getMarksCalculatorHTML() {
+            return `
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Total Marks</label>
+                        <input type="number" id="totalMarks" oninput="calculateMarks()" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Obtained Marks</label>
+                        <input type="number" id="obtainedMarks" oninput="calculateMarks()" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="425">
+                    </div>
+                    
+
+                    
+                    <div id="marksResults" class="space-y-3">
+                        <div class="p-4 bg-gray-50 rounded-lg">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="text-center">
+                                    <div class="text-sm text-gray-600">Percentage</div>
+                                    <div id="percentage" class="text-xl font-bold text-blue-600">0%</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-sm text-gray-600">Grade</div>
+                                    <div id="grade" class="text-xl font-bold text-green-600">-</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-4 bg-blue-50 rounded-lg">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="text-center">
+                                    <div class="text-sm text-gray-600">Total Obtained</div>
+                                    <div id="totalObtained" class="text-lg font-semibold text-blue-600">0</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-sm text-gray-600">Status</div>
+                                    <div id="status" class="text-lg font-semibold text-green-600">-</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Calculator Functions
+        window.calculatorFunctions = {
+            // Basic Calculator Variables
+            basicCurrentInput: '0',
+            basicOperator: null,
+            basicPreviousInput: null,
+            basicWaitingForOperand: false,
+
+            // Scientific Calculator Variables
+            scientificExpression: '',
+
+            // Unit Converter Variables
+            unitData: {
+                length: {
+                    meter: 1,
+                    kilometer: 0.001,
+                    centimeter: 100,
+                    millimeter: 1000,
+                    inch: 39.3701,
+                    foot: 3.28084,
+                    yard: 1.09361,
+                    mile: 0.000621371
+                },
+                weight: {
+                    kilogram: 1,
+                    gram: 1000,
+                    pound: 2.20462,
+                    ounce: 35.274,
+                    ton: 0.001
+                },
+                temperature: {
+                    celsius: 'C',
+                    fahrenheit: 'F',
+                    kelvin: 'K'
+                }
+            },
+
+            // Binary Converter Variables
+            isConverting: false,
+            isConvertingTemp: false
+        };
+
+        // Animation Helper Functions
+        window.addAnimation = function(element, animationClass) {
+            if (element) {
+                element.classList.add(animationClass);
+                setTimeout(() => {
+                    element.classList.remove(animationClass);
+                }, 600);
+            }
+        };
+
+        window.animateButton = function(button) {
+            button.classList.add('number-pop');
+            setTimeout(() => {
+                button.classList.remove('number-pop');
+            }, 300);
+        };
+
+        window.showResultWithAnimation = function(elementId) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.classList.remove('hidden');
+                window.addAnimation(element, 'result-reveal');
+            }
+        };
+
+        // Basic Calculator Functions
+        window.updateBasicDisplay = function() {
+            const display = document.getElementById('basicDisplay');
+            display.textContent = window.calculatorFunctions.basicCurrentInput;
+            window.addAnimation(display, 'number-pop');
+        };
+
+        window.numberBasic = function(num) {
+            if (window.calculatorFunctions.basicWaitingForOperand) {
+                window.calculatorFunctions.basicCurrentInput = num;
+                window.calculatorFunctions.basicWaitingForOperand = false;
+            } else {
+                window.calculatorFunctions.basicCurrentInput = window.calculatorFunctions.basicCurrentInput === '0' ? num : window.calculatorFunctions.basicCurrentInput + num;
+            }
+            window.updateBasicDisplay();
+        };
+
+        window.operatorBasic = function(nextOperator) {
+            const inputValue = parseFloat(window.calculatorFunctions.basicCurrentInput);
+
+            if (window.calculatorFunctions.basicPreviousInput === null) {
+                window.calculatorFunctions.basicPreviousInput = inputValue;
+            } else if (window.calculatorFunctions.basicOperator) {
+                const currentValue = window.calculatorFunctions.basicPreviousInput || 0;
+                const newValue = window.calculate(currentValue, inputValue, window.calculatorFunctions.basicOperator);
+
+                window.calculatorFunctions.basicCurrentInput = String(newValue);
+                window.calculatorFunctions.basicPreviousInput = newValue;
+                window.updateBasicDisplay();
+            }
+
+            window.calculatorFunctions.basicWaitingForOperand = true;
+            window.calculatorFunctions.basicOperator = nextOperator;
+        };
+
+        window.calculateBasic = function() {
+            const inputValue = parseFloat(window.calculatorFunctions.basicCurrentInput);
+
+            if (window.calculatorFunctions.basicPreviousInput !== null && window.calculatorFunctions.basicOperator) {
+                const newValue = window.calculate(window.calculatorFunctions.basicPreviousInput, inputValue, window.calculatorFunctions.basicOperator);
+                window.calculatorFunctions.basicCurrentInput = String(newValue);
+                window.calculatorFunctions.basicPreviousInput = null;
+                window.calculatorFunctions.basicOperator = null;
+                window.calculatorFunctions.basicWaitingForOperand = true;
+                window.updateBasicDisplay();
+            }
+        };
+
+        window.calculate = function(firstOperand, secondOperand, operator) {
+            switch (operator) {
+                case '+': return firstOperand + secondOperand;
+                case '-': return firstOperand - secondOperand;
+                case '*': return firstOperand * secondOperand;
+                case '/': return firstOperand / secondOperand;
+                default: return secondOperand;
+            }
+        };
+
+        window.clearBasic = function() {
+            window.calculatorFunctions.basicCurrentInput = '0';
+            window.calculatorFunctions.basicPreviousInput = null;
+            window.calculatorFunctions.basicOperator = null;
+            window.calculatorFunctions.basicWaitingForOperand = false;
+            window.updateBasicDisplay();
+        };
+
+        window.deleteBasic = function() {
+            window.calculatorFunctions.basicCurrentInput = window.calculatorFunctions.basicCurrentInput.slice(0, -1) || '0';
+            window.updateBasicDisplay();
+        };
+
+        // BMI Calculator Functions
+        window.calculateBMI = function() {
+            const height = parseFloat(document.getElementById('height').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+            
+            if (!height || !weight) {
+                const inputs = document.querySelectorAll('#height, #weight');
+                inputs.forEach(input => {
+                    if (!input.value) {
+                        window.addAnimation(input, 'shake-error');
+                    }
+                });
+                alert('Please enter both height and weight');
+                return;
+            }
+            
+            const bmi = weight / ((height / 100) ** 2);
+            const bmiRounded = Math.round(bmi * 10) / 10;
+            
+            let category, description, color;
+            
+            if (bmi < 18.5) {
+                category = 'Underweight';
+                description = 'Consider consulting a healthcare provider';
+                color = 'text-blue-600';
+            } else if (bmi < 25) {
+                category = 'Normal weight';
+                description = 'Maintain your healthy lifestyle';
+                color = 'text-green-600';
+            } else if (bmi < 30) {
+                category = 'Overweight';
+                description = 'Consider a balanced diet and exercise';
+                color = 'text-yellow-600';
+            } else {
+                category = 'Obese';
+                description = 'Consult a healthcare provider for guidance';
+                color = 'text-red-600';
+            }
+            
+            document.getElementById('bmiValue').textContent = bmiRounded;
+            document.getElementById('bmiCategory').textContent = category;
+            document.getElementById('bmiCategory').className = 'text-lg font-medium mb-2 flip-in ' + color;
+            document.getElementById('bmiDescription').textContent = description;
+            window.showResultWithAnimation('bmiResult');
+        };
+
+        // Loan Calculator Functions
+        window.calculateLoan = function() {
+            const principal = parseFloat(document.getElementById('loanAmount').value);
+            const rate = parseFloat(document.getElementById('interestRate').value) / 100 / 12;
+            const time = parseFloat(document.getElementById('loanTerm').value) * 12;
+            
+            if (!principal || !rate || !time) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            const monthlyPayment = principal * (rate * Math.pow(1 + rate, time)) / (Math.pow(1 + rate, time) - 1);
+            const totalAmount = monthlyPayment * time;
+            const totalInterest = totalAmount - principal;
+            
+            document.getElementById('monthlyPayment').textContent = '$' + monthlyPayment.toFixed(2);
+            document.getElementById('totalInterest').textContent = '$' + totalInterest.toFixed(2);
+            document.getElementById('totalAmount').textContent = '$' + totalAmount.toFixed(2);
+            document.getElementById('loanResult').classList.remove('hidden');
+        };
+
+        // Unit Converter Functions
+        window.updateUnitOptions = function() {
+            const type = document.getElementById('conversionType').value;
+            const fromUnit = document.getElementById('fromUnit');
+            const toUnit = document.getElementById('toUnit');
+            
+            if (!fromUnit || !toUnit) return;
+            
+            fromUnit.innerHTML = '';
+            toUnit.innerHTML = '';
+            
+            Object.keys(window.calculatorFunctions.unitData[type]).forEach(unit => {
+                fromUnit.innerHTML += '<option value="' + unit + '">' + unit.charAt(0).toUpperCase() + unit.slice(1) + '</option>';
+                toUnit.innerHTML += '<option value="' + unit + '">' + unit.charAt(0).toUpperCase() + unit.slice(1) + '</option>';
+            });
+            
+            // Set different default units
+            if (type === 'length') {
+                fromUnit.value = 'meter';
+                toUnit.value = 'foot';
+            } else if (type === 'weight') {
+                fromUnit.value = 'kilogram';
+                toUnit.value = 'pound';
+            }
+            
+            window.convertUnit();
+        };
+
+        window.convertUnit = function() {
+            const type = document.getElementById('conversionType').value;
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+            const inputValue = parseFloat(document.getElementById('inputValue').value) || 0;
+            
+            let result;
+            
+            if (type === 'temperature') {
+                result = window.convertTemperature(inputValue, fromUnit, toUnit);
+            } else {
+                const fromFactor = window.calculatorFunctions.unitData[type][fromUnit];
+                const toFactor = window.calculatorFunctions.unitData[type][toUnit];
+                result = (inputValue / fromFactor) * toFactor;
+            }
+            
+            document.getElementById('conversionResult').textContent = result.toFixed(4);
+        };
+
+        window.convertTemperature = function(value, from, to) {
+            let celsius;
+            
+            // Convert to Celsius first
+            switch(from) {
+                case 'celsius': celsius = value; break;
+                case 'fahrenheit': celsius = (value - 32) * 5/9; break;
+                case 'kelvin': celsius = value - 273.15; break;
+            }
+            
+            // Convert from Celsius to target
+            switch(to) {
+                case 'celsius': return celsius;
+                case 'fahrenheit': return celsius * 9/5 + 32;
+                case 'kelvin': return celsius + 273.15;
+            }
+        };
+
+        // Age Calculator Functions
+        window.calculateAge = function() {
+            const birthDateInput = document.getElementById('birthDate').value;
+            const asOfDateInput = document.getElementById('asOfDate').value;
+            
+            if (!birthDateInput) {
+                alert('Please enter a birth date');
+                return;
+            }
+            
+            const birthDate = new Date(birthDateInput);
+            const asOfDate = asOfDateInput ? new Date(asOfDateInput) : new Date();
+            
+            if (birthDate > asOfDate) {
+                alert('Birth date cannot be in the future');
+                return;
+            }
+            
+            // Calculate exact age
+            let years = asOfDate.getFullYear() - birthDate.getFullYear();
+            let months = asOfDate.getMonth() - birthDate.getMonth();
+            let days = asOfDate.getDate() - birthDate.getDate();
+            
+            // Adjust for negative days
+            if (days < 0) {
+                months--;
+                const lastMonth = new Date(asOfDate.getFullYear(), asOfDate.getMonth(), 0);
+                days += lastMonth.getDate();
+            }
+            
+            // Adjust for negative months
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+            
+            // Calculate total values
+            const totalDays = Math.floor((asOfDate - birthDate) / (1000 * 60 * 60 * 24));
+            const totalHours = Math.floor((asOfDate - birthDate) / (1000 * 60 * 60));
+            const totalMonths = years * 12 + months;
+            
+            // Display results
+            document.getElementById('ageYears').textContent = years + ' years, ' + months + ' months, ' + days + ' days';
+            document.getElementById('ageMonths').textContent = totalMonths.toLocaleString();
+            document.getElementById('ageDays').textContent = totalDays.toLocaleString();
+            document.getElementById('ageHours').textContent = totalHours.toLocaleString();
+            document.getElementById('ageResult').classList.remove('hidden');
+        };
+
+        // Binary Converter Functions
+        window.convertFromDecimal = function() {
+            if (window.calculatorFunctions.isConverting) return;
+            window.calculatorFunctions.isConverting = true;
+            
+            const decimal = parseInt(document.getElementById('decimalInput').value);
+            if (!isNaN(decimal) && decimal >= 0) {
+                document.getElementById('binaryInput').value = decimal.toString(2);
+                document.getElementById('hexInput').value = decimal.toString(16).toUpperCase();
+                document.getElementById('octalInput').value = decimal.toString(8);
+            }
+            
+            window.calculatorFunctions.isConverting = false;
+        };
+
+        window.convertFromBinary = function() {
+            if (window.calculatorFunctions.isConverting) return;
+            window.calculatorFunctions.isConverting = true;
+            
+            const binary = document.getElementById('binaryInput').value.trim();
+            if (binary && /^[01]+$/.test(binary)) {
+                const decimal = parseInt(binary, 2);
+                document.getElementById('decimalInput').value = decimal;
+                document.getElementById('hexInput').value = decimal.toString(16).toUpperCase();
+                document.getElementById('octalInput').value = decimal.toString(8);
+            } else if (binary && !/^[01]+$/.test(binary)) {
+                // Clear other fields if invalid binary
+                document.getElementById('decimalInput').value = '';
+                document.getElementById('hexInput').value = '';
+                document.getElementById('octalInput').value = '';
+            }
+            
+            window.calculatorFunctions.isConverting = false;
+        };
+
+        window.convertFromHex = function() {
+            if (window.calculatorFunctions.isConverting) return;
+            window.calculatorFunctions.isConverting = true;
+            
+            const hex = document.getElementById('hexInput').value.trim();
+            if (hex && /^[0-9A-Fa-f]+$/.test(hex)) {
+                const decimal = parseInt(hex, 16);
+                document.getElementById('decimalInput').value = decimal;
+                document.getElementById('binaryInput').value = decimal.toString(2);
+                document.getElementById('octalInput').value = decimal.toString(8);
+            } else if (hex && !/^[0-9A-Fa-f]+$/.test(hex)) {
+                // Clear other fields if invalid hex
+                document.getElementById('decimalInput').value = '';
+                document.getElementById('binaryInput').value = '';
+                document.getElementById('octalInput').value = '';
+            }
+            
+            window.calculatorFunctions.isConverting = false;
+        };
+
+        window.convertFromOctal = function() {
+            if (window.calculatorFunctions.isConverting) return;
+            window.calculatorFunctions.isConverting = true;
+            
+            const octal = document.getElementById('octalInput').value.trim();
+            if (octal && /^[0-7]+$/.test(octal)) {
+                const decimal = parseInt(octal, 8);
+                document.getElementById('decimalInput').value = decimal;
+                document.getElementById('binaryInput').value = decimal.toString(2);
+                document.getElementById('hexInput').value = decimal.toString(16).toUpperCase();
+            } else if (octal && !/^[0-7]+$/.test(octal)) {
+                // Clear other fields if invalid octal
+                document.getElementById('decimalInput').value = '';
+                document.getElementById('binaryInput').value = '';
+                document.getElementById('hexInput').value = '';
+            }
+            
+            window.calculatorFunctions.isConverting = false;
+        };
+
+        window.clearAllInputs = function() {
+            document.getElementById('decimalInput').value = '';
+            document.getElementById('binaryInput').value = '';
+            document.getElementById('hexInput').value = '';
+            document.getElementById('octalInput').value = '';
+        };
+
+        // Scientific Calculator Functions
+        window.updateScientificDisplay = function() {
+            document.getElementById('scientificDisplay').textContent = window.calculatorFunctions.scientificExpression || '0';
+        };
+
+        window.numberScientific = function(num) {
+            if (num === 'π') {
+                window.calculatorFunctions.scientificExpression += Math.PI;
+            } else if (num === 'e') {
+                window.calculatorFunctions.scientificExpression += Math.E;
+            } else {
+                window.calculatorFunctions.scientificExpression += num;
+            }
+            window.updateScientificDisplay();
+        };
+
+        window.operatorScientific = function(op) {
+            window.calculatorFunctions.scientificExpression += op;
+            window.updateScientificDisplay();
+        };
+
+        window.scientificFunction = function(func) {
+            switch(func) {
+                case 'sqrt':
+                    window.calculatorFunctions.scientificExpression += 'Math.sqrt(';
+                    break;
+                case 'pow':
+                    window.calculatorFunctions.scientificExpression += 'Math.pow(';
+                    break;
+                case 'log':
+                    window.calculatorFunctions.scientificExpression += 'Math.log10(';
+                    break;
+                case 'sin':
+                    window.calculatorFunctions.scientificExpression += 'Math.sin(';
+                    break;
+                case 'cos':
+                    window.calculatorFunctions.scientificExpression += 'Math.cos(';
+                    break;
+                case 'tan':
+                    window.calculatorFunctions.scientificExpression += 'Math.tan(';
+                    break;
+            }
+            window.updateScientificDisplay();
+        };
+
+        window.calculateScientific = function() {
+            try {
+                // Replace display operators with JavaScript operators
+                let expression = window.calculatorFunctions.scientificExpression
+                    .replace(/×/g, '*')
+                    .replace(/÷/g, '/')
+                    .replace(/−/g, '-');
+                
+                const result = eval(expression);
+                window.calculatorFunctions.scientificExpression = result.toString();
+                window.updateScientificDisplay();
+            } catch (error) {
+                window.calculatorFunctions.scientificExpression = 'Error';
+                window.updateScientificDisplay();
+            }
+        };
+
+        window.clearScientific = function() {
+            window.calculatorFunctions.scientificExpression = '';
+            window.updateScientificDisplay();
+        };
+
+        window.deleteScientific = function() {
+            window.calculatorFunctions.scientificExpression = window.calculatorFunctions.scientificExpression.slice(0, -1);
+            window.updateScientificDisplay();
+        };
+
+        // Percentage Calculator Functions
+        window.calculatePercentOf = function() {
+            const percent = parseFloat(document.getElementById('percent1').value);
+            const value = parseFloat(document.getElementById('value1').value);
+            
+            if (isNaN(percent) || isNaN(value)) {
+                document.getElementById('result1').textContent = 'Please enter valid numbers';
+                return;
+            }
+            
+            const result = (percent / 100) * value;
+            document.getElementById('result1').textContent = percent + '% of ' + value + ' = ' + result.toFixed(2);
+        };
+
+        window.calculateWhatPercent = function() {
+            const value = parseFloat(document.getElementById('value2').value);
+            const total = parseFloat(document.getElementById('total2').value);
+            
+            if (isNaN(value) || isNaN(total)) {
+                document.getElementById('result2').textContent = 'Please enter valid numbers';
+                return;
+            }
+            
+            if (total === 0) {
+                document.getElementById('result2').textContent = 'Cannot divide by zero';
+                return;
+            }
+            
+            const result = (value / total) * 100;
+            document.getElementById('result2').textContent = value + ' is ' + result.toFixed(2) + '% of ' + total;
+        };
+
+        window.calculatePercentChange = function() {
+            const oldValue = parseFloat(document.getElementById('oldValue').value);
+            const newValue = parseFloat(document.getElementById('newValue').value);
+            
+            if (isNaN(oldValue) || isNaN(newValue)) {
+                document.getElementById('result3').textContent = 'Please enter valid numbers';
+                return;
+            }
+            
+            if (oldValue === 0) {
+                document.getElementById('result3').textContent = 'Cannot calculate change from zero';
+                return;
+            }
+            
+            const change = ((newValue - oldValue) / oldValue) * 100;
+            const changeText = change >= 0 ? 'increase' : 'decrease';
+            const changeColor = change >= 0 ? 'text-green-600' : 'text-red-600';
+            
+            document.getElementById('result3').textContent = Math.abs(change).toFixed(2) + '% ' + changeText;
+            document.getElementById('result3').className = 'mt-2 text-center font-semibold ' + changeColor;
+        };
+
+        // Compound Interest Functions
+        window.calculateCompoundInterest = function() {
+            const principal = parseFloat(document.getElementById('principal').value);
+            const rate = parseFloat(document.getElementById('rate').value) / 100;
+            const time = parseFloat(document.getElementById('time').value);
+            const frequency = parseFloat(document.getElementById('frequency').value);
+            
+            if (!principal || !rate || !time || !frequency) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            const finalAmount = principal * Math.pow((1 + rate / frequency), frequency * time);
+            const interestEarned = finalAmount - principal;
+            const totalReturn = ((finalAmount - principal) / principal) * 100;
+            
+            document.getElementById('finalAmount').textContent = '$' + finalAmount.toFixed(2);
+            document.getElementById('interestEarned').textContent = '$' + interestEarned.toFixed(2);
+            document.getElementById('totalReturn').textContent = totalReturn.toFixed(2) + '%';
+            document.getElementById('compoundResult').classList.remove('hidden');
+        };
+
+        // Calorie Calculator Functions
+        window.calculateCalories = function() {
+            const age = parseFloat(document.getElementById('age').value);
+            const gender = document.getElementById('gender').value;
+            const height = parseFloat(document.getElementById('heightCal').value);
+            const weight = parseFloat(document.getElementById('weightCal').value);
+            const activity = parseFloat(document.getElementById('activity').value);
+            
+            if (!age || !height || !weight) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            // Calculate BMR using Mifflin-St Jeor Equation
+            let bmr;
+            if (gender === 'male') {
+                bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+            } else {
+                bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+            }
+            
+            const maintenanceCalories = Math.round(bmr * activity);
+            const weightLossCalories = Math.round(maintenanceCalories - 500);
+            const weightGainCalories = Math.round(maintenanceCalories + 500);
+            
+            document.getElementById('maintenanceCalories').textContent = maintenanceCalories + ' cal/day';
+            document.getElementById('weightLoss').textContent = weightLossCalories + ' cal';
+            document.getElementById('maintenance').textContent = maintenanceCalories + ' cal';
+            document.getElementById('weightGain').textContent = weightGainCalories + ' cal';
+            document.getElementById('calorieResult').classList.remove('hidden');
+        };
+
+        // Temperature Converter Functions
+        window.convertFromCelsius = function() {
+            if (window.calculatorFunctions.isConvertingTemp) return;
+            window.calculatorFunctions.isConvertingTemp = true;
+            
+            const celsius = parseFloat(document.getElementById('celsius').value);
+            if (!isNaN(celsius)) {
+                const fahrenheit = (celsius * 9/5) + 32;
+                const kelvin = celsius + 273.15;
+                
+                document.getElementById('fahrenheit').value = fahrenheit.toFixed(2);
+                document.getElementById('kelvin').value = kelvin.toFixed(2);
+            }
+            
+            window.calculatorFunctions.isConvertingTemp = false;
+        };
+
+        window.convertFromFahrenheit = function() {
+            if (window.calculatorFunctions.isConvertingTemp) return;
+            window.calculatorFunctions.isConvertingTemp = true;
+            
+            const fahrenheit = parseFloat(document.getElementById('fahrenheit').value);
+            if (!isNaN(fahrenheit)) {
+                const celsius = (fahrenheit - 32) * 5/9;
+                const kelvin = celsius + 273.15;
+                
+                document.getElementById('celsius').value = celsius.toFixed(2);
+                document.getElementById('kelvin').value = kelvin.toFixed(2);
+            }
+            
+            window.calculatorFunctions.isConvertingTemp = false;
+        };
+
+        window.convertFromKelvin = function() {
+            if (window.calculatorFunctions.isConvertingTemp) return;
+            window.calculatorFunctions.isConvertingTemp = true;
+            
+            const kelvin = parseFloat(document.getElementById('kelvin').value);
+            if (!isNaN(kelvin)) {
+                const celsius = kelvin - 273.15;
+                const fahrenheit = (celsius * 9/5) + 32;
+                
+                document.getElementById('celsius').value = celsius.toFixed(2);
+                document.getElementById('fahrenheit').value = fahrenheit.toFixed(2);
+            }
+            
+            window.calculatorFunctions.isConvertingTemp = false;
+        };
+
+        window.clearTemperature = function() {
+            document.getElementById('celsius').value = '';
+            document.getElementById('fahrenheit').value = '';
+            document.getElementById('kelvin').value = '';
+        };
+
+        // Marks Percentage Calculator Functions
+        window.calculateMarks = function() {
+            const totalMarks = parseFloat(document.getElementById('totalMarks').value) || 0;
+            const obtainedMarks = parseFloat(document.getElementById('obtainedMarks').value) || 0;
+            
+            if (totalMarks === 0) {
+                document.getElementById('percentage').textContent = '0%';
+                document.getElementById('grade').textContent = '-';
+                document.getElementById('status').textContent = '-';
+                document.getElementById('totalObtained').textContent = '0';
+                return;
+            }
+            
+            const percentage = (obtainedMarks / totalMarks) * 100;
+            const grade = window.getGrade(percentage);
+            const status = percentage >= 40 ? 'Pass' : 'Fail';
+            const statusColor = percentage >= 40 ? 'text-green-600' : 'text-red-600';
+            
+            document.getElementById('percentage').textContent = percentage.toFixed(2) + '%';
+            document.getElementById('grade').textContent = grade;
+            document.getElementById('status').textContent = status;
+            document.getElementById('status').className = 'text-lg font-semibold ' + statusColor;
+            document.getElementById('totalObtained').textContent = obtainedMarks;
+        };
+
+
+
+        window.getGrade = function(percentage) {
+            if (percentage >= 90) return 'A+';
+            if (percentage >= 80) return 'A';
+            if (percentage >= 70) return 'B+';
+            if (percentage >= 60) return 'B';
+            if (percentage >= 50) return 'C+';
+            if (percentage >= 40) return 'C';
+            return 'F';
+        };
+
+        // Theme toggle function
+        window.toggleTheme = function() {
+            const body = document.body;
+            const themeIcon = document.getElementById('theme-icon');
+            const header = document.querySelector('header');
+            const footer = document.getElementById('footer');
+            const cards = document.querySelectorAll('.calculator-card');
+            const modal = document.querySelector('#calculatorModal > div');
+            
+            if (body.classList.contains('dark-theme')) {
+                // Switch to light mode
+                body.classList.remove('dark-theme');
+                body.className = 'bg-gray-50 min-h-screen';
+                header.className = 'bg-white shadow-sm border-b border-gray-200';
+                footer.className = 'bg-white border-t border-gray-200 mt-16';
+                
+                cards.forEach(card => {
+                    card.className = 'calculator-card bg-white rounded-xl shadow-lg card-hover cursor-pointer overflow-hidden';
+                });
+                
+                if (modal) {
+                    modal.className = 'bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto';
+                }
+                
+                themeIcon.textContent = '🌙';
+                localStorage.setItem('theme', 'light');
+            } else {
+                // Switch to dark mode
+                body.classList.add('dark-theme');
+                body.className = 'bg-gray-900 min-h-screen dark-theme';
+                header.className = 'bg-gray-800 shadow-sm border-b border-gray-700';
+                footer.className = 'bg-gray-800 border-t border-gray-700 mt-16';
+                
+                cards.forEach(card => {
+                    card.className = 'calculator-card bg-gray-800 rounded-xl shadow-lg card-hover cursor-pointer overflow-hidden';
+                });
+                
+                if (modal) {
+                    modal.className = 'bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto';
+                }
+                
+                themeIcon.textContent = '☀️';
+                localStorage.setItem('theme', 'dark');
+            }
+        };
+
+        // Initialize theme from localStorage
+        window.initTheme = function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                window.toggleTheme();
+            }
+        };
+
+        // Close modal when clicking outside
+        document.getElementById('calculatorModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Initialize the application
+        init();
+        window.initTheme();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97e0494b742b2704',t:'MTc1NzY4OTM1MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
